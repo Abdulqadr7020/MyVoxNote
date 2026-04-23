@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Copy, CheckCheck, FileDown } from 'lucide-react';
 
-const ExportBar = React.memo(({ summary, bullets, questions }) => {
+const ExportBar = React.memo(({ summary, bullets, questions, isDark = true }) => {
   const [copied, setCopied] = useState(false);
 
   const buildPlainText = () => {
@@ -125,22 +125,36 @@ const ExportBar = React.memo(({ summary, bullets, questions }) => {
       style={{
         display: 'flex', alignItems: 'center', gap: '10px', padding: '14px 20px',
         flexWrap: 'wrap', justifyContent: 'flex-end',
-        animation: 'result-reveal 0.5s ease-out forwards'
+        animation: 'result-reveal 0.5s ease-out forwards',
+        background: isDark ? 'var(--surface-color)' : 'rgba(255,255,255,0.85)',
+        border: `1px solid ${isDark ? 'var(--surface-border)' : 'rgba(0,0,0,0.05)'}`
       }}
     >
-      <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginRight: 'auto' }}>
+      <span style={{ color: isDark ? 'var(--text-secondary)' : '#64748b', fontSize: '0.85rem', marginRight: 'auto', fontWeight: 600 }}>
         ✨ Notes ready
       </span>
 
       <button
         onClick={handleCopy}
         className="magic-reveal-btn hover-lift tap-effect"
-        style={{ background: copied ? 'rgba(16, 185, 129, 0.15)' : undefined, color: copied ? 'var(--success)' : undefined }}
+        style={{ 
+          background: copied ? 'rgba(16, 185, 129, 0.15)' : (isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.03)'), 
+          color: copied ? 'var(--success)' : (isDark ? 'white' : '#475569'),
+          border: `1px solid ${copied ? 'rgba(16, 185, 129, 0.3)' : (isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)')}`
+        }}
       >
         {copied ? <><CheckCheck size={15} /> Copied!</> : <><Copy size={15} /> Copy</>}
       </button>
 
-      <button onClick={handlePDF} className="magic-reveal-btn hover-lift tap-effect">
+      <button 
+        onClick={handlePDF} 
+        className="magic-reveal-btn hover-lift tap-effect"
+        style={{
+          background: isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.03)',
+          color: isDark ? 'white' : '#475569',
+          border: `1px solid ${isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)'}`
+        }}
+      >
         <FileDown size={15} /> Export PDF
       </button>
     </div>

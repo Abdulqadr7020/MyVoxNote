@@ -65,6 +65,49 @@ body.light-mode .magic-highlight {
   background: rgba(6, 182, 212, 0.1);
 }
 
+body.light-mode ::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+body.light-mode ::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+body.light-mode .info-badge {
+  background: rgba(0, 0, 0, 0.05) !important;
+  color: var(--text-secondary) !important;
+}
+
+body.light-mode .status-pill {
+  background: rgba(255, 255, 255, 0.8) !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+body.light-mode .status-live {
+  background: rgba(239, 68, 68, 0.05) !important;
+  border-color: rgba(239, 68, 68, 0.2) !important;
+}
+
+body.light-mode .skeleton-line {
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.03) 0%, rgba(0, 0, 0, 0.08) 50%, rgba(0, 0, 0, 0.03) 100%) !important;
+}
+
+body.light-mode .magic-reveal-btn {
+  background: rgba(139, 92, 246, 0.08) !important;
+  border-color: rgba(139, 92, 246, 0.2) !important;
+}
+
+body.light-mode .auth-modal {
+  background: rgba(255, 255, 255, 0.85) !important;
+  border-color: rgba(0, 0, 0, 0.05) !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1), 0 0 100px rgba(139, 92, 246, 0.05) !important;
+}
+
+body.light-mode .timeline-viz-card {
+  background: radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.02) 0%, #f8fafc 100%) !important;
+  box-shadow: 0 40px 120px rgba(0, 0, 0, 0.1) !important;
+}
+
 /* Smooth transition for theme switching */
 body,
 .glass-panel,

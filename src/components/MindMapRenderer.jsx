@@ -1,9 +1,9 @@
 import React, { useMemo, useCallback, useState, useEffect } from 'react';
-import { 
-  ReactFlow, 
-  Background, 
-  useNodesState, 
-  useEdgesState, 
+import {
+  ReactFlow,
+  Background,
+  useNodesState,
+  useEdgesState,
   Panel,
   Handle,
   Position,
@@ -61,12 +61,12 @@ const MindMapNode = ({ data, selected }) => {
   const isRoot = data.type === 'root';
   const hasChildren = data.childCount > 0;
   const theme = categoryColors[data.category] || categoryColors[data.type] || categoryColors.theory;
-  
+
   return (
-    <div style={{ 
-      padding: isRoot ? '24px 32px' : '16px 24px', 
-      borderRadius: '24px', 
-      background: isRoot ? theme.bg : (isDark ? 'rgba(30, 41, 59, 0.95)' : 'rgba(255, 255, 255, 0.98)'), 
+    <div style={{
+      padding: isRoot ? '24px 32px' : '16px 24px',
+      borderRadius: '24px',
+      background: isRoot ? theme.bg : (isDark ? 'rgba(30, 41, 59, 0.95)' : 'rgba(255, 255, 255, 0.98)'),
       backdropFilter: 'blur(20px)',
       border: `2.5px solid ${selected ? (isDark ? '#fff' : theme.border) : (isRoot ? (isDark ? theme.border : 'rgba(0,0,0,0.1)') : (isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)'))}`,
       color: isDark ? 'white' : '#0f172a',
@@ -80,11 +80,11 @@ const MindMapNode = ({ data, selected }) => {
     }}>
       {/* Premium Top Accent Line */}
       <div style={{
-          position: 'absolute', top: 0, left: 0, right: 0, height: '4px',
-          background: `linear-gradient(90deg, transparent, ${theme.border}, transparent)`,
-          opacity: 0.8
+        position: 'absolute', top: 0, left: 0, right: 0, height: '4px',
+        background: `linear-gradient(90deg, transparent, ${theme.border}, transparent)`,
+        opacity: 0.8
       }} />
-      
+
       <Handle type="target" position={Position.Left} style={{ opacity: 0 }} />
       <div style={{ fontSize: isRoot ? '1.2rem' : '1.05rem', fontWeight: 800, letterSpacing: '-0.01em' }}>
         {data.label}
@@ -93,8 +93,8 @@ const MindMapNode = ({ data, selected }) => {
         {data.category || data.type}
       </div>
       {hasChildren && (
-        <div style={{ 
-          marginTop: '12px', fontSize: '0.65rem', color: '#94a3b8', 
+        <div style={{
+          marginTop: '12px', fontSize: '0.65rem', color: '#94a3b8',
           background: 'rgba(0,0,0,0.4)', padding: '5px 12px', borderRadius: '12px',
           border: '1px solid rgba(255,255,255,0.05)'
         }}>
@@ -114,16 +114,16 @@ const MindMapEdge = ({ id, sourceX, sourceY, targetX, targetY, label, style, dat
   return (
     <>
       {/* Outer Glow Path */}
-      <BaseEdge path={edgePath} style={{ 
-        stroke: '#06b6d4', 
-        strokeWidth: isDark ? 4 : 2, 
+      <BaseEdge path={edgePath} style={{
+        stroke: '#06b6d4',
+        strokeWidth: isDark ? 4 : 2,
         opacity: isDark ? 0.3 : 0.1,
         filter: isDark ? 'blur(3px)' : 'none'
       }} />
       {/* Inner Neon Path */}
-      <BaseEdge path={edgePath} style={{ 
-        stroke: isDark ? 'white' : '#0891b2', 
-        strokeWidth: 1.5, 
+      <BaseEdge path={edgePath} style={{
+        stroke: isDark ? 'white' : '#0891b2',
+        strokeWidth: 1.5,
         opacity: isDark ? 0.5 : 0.8,
       }} />
       {label && (
@@ -169,13 +169,13 @@ const MindMapContent = ({ treeData, isDark = true }) => {
         node.children.forEach(child => {
           const res = extractAll(child, level + 1);
           nodes.push(...res.nodes);
-          edges.push({ 
-            id: `e-${node.id}-${child.id}`, 
-            source: node.id, 
-            target: child.id, 
-            label: child.edgeLabel, 
+          edges.push({
+            id: `e-${node.id}-${child.id}`,
+            source: node.id,
+            target: child.id,
+            label: child.edgeLabel,
             type: 'mindmap',
-            data: { isDark } 
+            data: { isDark }
           });
           edges.push(...res.edges);
         });
@@ -185,11 +185,11 @@ const MindMapContent = ({ treeData, isDark = true }) => {
 
     const all = extractAll(treeData);
     const layouted = getLayoutedElements(all.nodes, all.edges);
-    
+
     // Map of ID -> Position
     const posMap = {};
     layouted.nodes.forEach(n => { posMap[n.id] = n.position; });
-    
+
     return { allNodes: layouted.nodes, allEdges: layouted.edges, posMap };
   }, [treeData]);
 
@@ -253,7 +253,7 @@ const MindMapContent = ({ treeData, isDark = true }) => {
 
     const isCollapsed = collapsedNodes.has(node.id);
     const inActivePath = activePathIds.has(node.id);
-    
+
     // Visibility logic
     const hiddenByFocus = isFocusMode && !inActivePath && (level > 0);
     const hiddenByParent = parentHidden;
@@ -262,8 +262,8 @@ const MindMapContent = ({ treeData, isDark = true }) => {
     const nodes = [{
       id: node.id,
       type: 'mindmap',
-      data: { 
-        label: node.label, 
+      data: {
+        label: node.label,
         type: node.type || (level === 0 ? 'root' : 'branch'),
         category: node.category,
         childCount: node.children?.length || 0,
@@ -273,7 +273,7 @@ const MindMapContent = ({ treeData, isDark = true }) => {
       position: staticLayout.posMap[node.id] || { x: 0, y: 0 },
       hidden: isHidden
     }];
-    
+
     let edges = [];
     if (node.children) {
       node.children.forEach(child => {
@@ -296,9 +296,9 @@ const MindMapContent = ({ treeData, isDark = true }) => {
 
   const { visibleNodes, visibleEdges } = useMemo(() => {
     const result = processTree(treeData);
-    return { 
-      visibleNodes: result.nodes.filter(n => !n.hidden), 
-      visibleEdges: result.edges.filter(e => !e.hidden) 
+    return {
+      visibleNodes: result.nodes.filter(n => !n.hidden),
+      visibleEdges: result.edges.filter(e => !e.hidden)
     };
   }, [treeData, processTree]);
 
@@ -325,40 +325,27 @@ const MindMapContent = ({ treeData, isDark = true }) => {
 
   return (
     <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-      {/* Breadcrumbs */}
-      <div style={{ 
-        display: 'flex', 
-        alignItems: 'center', 
-        gap: '8px', 
-        padding: '12px 24px', 
-        background: isDark ? 'rgba(255,255,255,0.02)' : 'rgba(255,255,255,0.8)', 
-        borderRadius: '16px', 
-        border: `1px solid ${isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'}`, 
-        overflowX: 'auto',
-        boxShadow: isDark ? 'none' : '0 2px 10px rgba(0,0,0,0.02)'
-      }}>
-        <Target size={14} color="#8b5cf6" />
-        {breadcrumbs.length === 0 && <span style={{ fontSize: '0.8rem', color: isDark ? '#64748b' : '#94a3b8' }}>Select a node to view path</span>}
-        {breadcrumbs.map((step, i) => (
-          <React.Fragment key={i}>
-            <span style={{ 
-              fontSize: '0.8rem', 
-              color: i === breadcrumbs.length - 1 ? (isDark ? '#fff' : '#1e293b') : (isDark ? '#64748b' : '#94a3b8'), 
-              fontWeight: i === breadcrumbs.length - 1 ? 700 : 400, 
-              whiteSpace: 'nowrap' 
-            }}>{step}</span>
-            {i < breadcrumbs.length - 1 && <ChevronRight size={12} color={isDark ? "#334155" : "#e2e8f0"} />}
-          </React.Fragment>
-        ))}
+      <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
+        <button
+          onClick={() => setIsFocusMode(!isFocusMode)}
+          className="magic-reveal-btn"
+          style={{ background: 'var(--accent-gradient)', color: 'white', fontWeight: 700, marginTop: 0 }}
+        >
+          <ZoomIn size={16} /> {isFocusMode ? 'Focus On' : 'Full Map'}
+        </button>
+        <button onClick={onDownload} className="magic-reveal-btn" style={{ background: 'var(--accent-gradient)', color: 'white', fontWeight: 700, marginTop: 0 }}>
+          <Download size={16} /> Save Map
+        </button>
       </div>
 
-      <div style={{ 
-        width: '100%', 
-        height: '600px', 
-        background: isDark ? '#0d0f14' : '#ffffff', 
-        borderRadius: '32px', 
-        border: `1px solid ${isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.05)'}`, 
-        position: 'relative', 
+
+      <div style={{
+        width: '100%',
+        height: '600px',
+        background: isDark ? '#0d0f14' : '#ffffff',
+        borderRadius: '32px',
+        border: `1px solid ${isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.05)'}`,
+        position: 'relative',
         overflow: 'hidden',
         boxShadow: isDark ? 'none' : '0 10px 40px rgba(0,0,0,0.03)'
       }}>
@@ -369,51 +356,75 @@ const MindMapContent = ({ treeData, isDark = true }) => {
           nodeTypes={nodeTypes}
           edgeTypes={edgeTypes}
           minZoom={0.05}
+          fitView
+          fitViewOptions={{ padding: 0.2 }}
+          zoomOnScroll={false}
+          zoomOnPinch={false}
           style={{ width: '100%', height: '100%' }}
         >
-        <Background color={isDark ? "#1e293b" : "#cbd5e1"} gap={24} size={1} variant="dots" />
-          <Panel position="top-right" style={{ display: 'flex', gap: '8px', margin: '20px' }}>
-            <button 
-              onClick={() => setIsFocusMode(!isFocusMode)}
-              style={{ 
-                background: isFocusMode ? '#8b5cf6' : (isDark ? 'rgba(255,255,255,0.05)' : '#f8fafc'), 
-                color: isFocusMode ? 'white' : (isDark ? 'white' : '#1e293b'), 
-                padding: '10px 16px', 
-                borderRadius: '12px', 
-                border: `1px solid ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}`,
-                display: 'flex', alignItems: 'center', gap: '8px', transition: 'all 0.3s'
-              }}
-            >
-              <ZoomIn size={16} /> {isFocusMode ? 'Focus On' : 'Full Map'}
-            </button>
-            <button onClick={onDownload} className="magic-reveal-btn" style={{ background: 'var(--accent-gradient)', color: 'white', fontWeight: 700 }}>
-              <Download size={16} style={{ marginRight: '8px' }} /> Save Map
-            </button>
+          <Background color={isDark ? "#1e293b" : "#cbd5e1"} gap={24} size={1} variant="dots" />
+
+          {/* Integrated Breadcrumbs Panel */}
+          <Panel position="top-center" style={{
+            marginTop: '20px',
+            maxWidth: '40%',
+            pointerEvents: 'none' // Allow clicking through to nodes if needed, but the span has its own style
+          }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '10px 20px',
+              background: isDark ? 'rgba(15, 23, 42, 0.8)' : 'rgba(255,255,255,0.9)',
+              backdropFilter: 'blur(12px)',
+              borderRadius: '20px',
+              border: `1px solid ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(139, 92, 246, 0.2)'}`,
+              overflow: 'hidden',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.15)',
+              pointerEvents: 'auto'
+            }}>
+              <Target size={14} color="#8b5cf6" />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', overflowX: 'auto', scrollbarWidth: 'none' }}>
+                {breadcrumbs.length === 0 && <span style={{ fontSize: '0.75rem', color: isDark ? '#94a3b8' : '#64748b', whiteSpace: 'nowrap' }}>Explore the map</span>}
+                {breadcrumbs.map((step, i) => (
+                  <React.Fragment key={i}>
+                    <span style={{
+                      fontSize: '0.75rem',
+                      color: i === breadcrumbs.length - 1 ? (isDark ? '#fff' : '#1e293b') : (isDark ? '#94a3b8' : '#64748b'),
+                      fontWeight: i === breadcrumbs.length - 1 ? 700 : 500,
+                      whiteSpace: 'nowrap'
+                    }}>{step}</span>
+                    {i < breadcrumbs.length - 1 && <ChevronRight size={10} color={isDark ? "#334155" : "#cbd5e1"} />}
+                  </React.Fragment>
+                ))}
+              </div>
+            </div>
           </Panel>
+
           <Panel position="top-left" style={{ margin: '20px' }}>
             <div className="status-pill status-live" style={{ background: 'rgba(6, 182, 212, 0.05)', border: '1px solid rgba(6, 182, 212, 0.2)', color: '#06b6d4', opacity: 0.8 }}>
               🧠 INTELLIGENT MIND MAP
             </div>
           </Panel>
         </ReactFlow>
-        
+
         <div style={{ position: 'absolute', bottom: '20px', left: '20px', display: 'flex', gap: '12px' }}>
-           {Object.entries(categoryColors).map(([cat, theme]) => (
-             <div key={cat} style={{ 
-               display: 'flex', 
-               alignItems: 'center', 
-               gap: '6px', 
-               fontSize: '0.65rem', 
-               color: isDark ? '#94a3b8' : '#64748b', 
-               background: isDark ? 'rgba(0,0,0,0.3)' : 'rgba(255,255,255,0.8)', 
-               padding: '4px 8px', 
-               borderRadius: '8px',
-               border: isDark ? 'none' : '1px solid rgba(0,0,0,0.05)'
-             }}>
-                <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: theme.border }} />
-                {cat.toUpperCase()}
-             </div>
-           ))}
+          {Object.entries(categoryColors).map(([cat, theme]) => (
+            <div key={cat} style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              fontSize: '0.65rem',
+              color: isDark ? '#94a3b8' : '#64748b',
+              background: isDark ? 'rgba(0,0,0,0.3)' : 'rgba(255,255,255,0.8)',
+              padding: '4px 8px',
+              borderRadius: '8px',
+              border: isDark ? 'none' : '1px solid rgba(0,0,0,0.05)'
+            }}>
+              <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: theme.border }} />
+              {cat.toUpperCase()}
+            </div>
+          ))}
         </div>
       </div>
     </div>

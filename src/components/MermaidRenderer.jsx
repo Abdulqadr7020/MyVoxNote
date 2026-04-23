@@ -19,7 +19,7 @@ mermaid.initialize({
   }
 });
 
-const MermaidRenderer = ({ chart }) => {
+const MermaidRenderer = ({ chart, isDark = true }) => {
   const containerRef = useRef(null);
   const exportRef = useRef(null);
   const [svg, setSvg] = useState('');
@@ -31,6 +31,21 @@ const MermaidRenderer = ({ chart }) => {
   }, []);
 
   useEffect(() => {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: isDark ? 'dark' : 'default',
+      securityLevel: 'loose',
+      fontFamily: 'Inter, sans-serif',
+      themeVariables: {
+        primaryColor: '#8b5cf6',
+        primaryTextColor: isDark ? '#fff' : '#1e293b',
+        primaryBorderColor: '#8b5cf6',
+        lineColor: isDark ? '#06b6d4' : '#0891b2',
+        secondaryColor: isDark ? '#06b6d4' : '#0891b2',
+        tertiaryColor: isDark ? '#1e293b' : '#f8fafc'
+      }
+    });
+
     if (!chart) return;
     
     const cleanChart = chart.replace(/\\n/g, '\n').trim();
@@ -38,8 +53,8 @@ const MermaidRenderer = ({ chart }) => {
     const renderChart = async () => {
       try {
         setError(false);
-        const { svg } = await mermaid.render(id, cleanChart);
-        setSvg(svg);
+        const { svg: renderedSvg } = await mermaid.render(id, cleanChart);
+        setSvg(renderedSvg);
       } catch (e) {
         console.error("Mermaid Render Error", e);
         setError(true);
@@ -47,12 +62,12 @@ const MermaidRenderer = ({ chart }) => {
     };
     
     renderChart();
-  }, [chart, id]);
+  }, [chart, id, isDark]);
 
   const handleExport = async () => {
     if (!exportRef.current) return;
     try {
-      const dataUrl = await toPng(exportRef.current, { backgroundColor: '#0d0f14' });
+      const dataUrl = await toPng(exportRef.current, { backgroundColor: isDark ? '#0d0f14' : '#ffffff' });
       const link = document.createElement('a');
       link.download = `voxnote-visual-${Date.now()}.png`;
       link.href = dataUrl;
@@ -96,7 +111,7 @@ const MermaidRenderer = ({ chart }) => {
               </button>
             </div>
             
-            <div ref={exportRef} style={{ background: '#0d0f14', borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--surface-border)', flex: 1 }}>
+            <div ref={exportRef} style={{ background: isDark ? '#0d0f14' : '#ffffff', borderRadius: '12px', overflow: 'hidden', border: `1px solid ${isDark ? 'var(--surface-border)' : 'rgba(0,0,0,0.05)'}`, flex: 1 }}>
               <TransformComponent wrapperStyle={{ width: '100%', height: '400px' }} contentStyle={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <div 
                   ref={containerRef} 

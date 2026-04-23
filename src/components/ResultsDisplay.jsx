@@ -147,15 +147,15 @@ const ResultsDisplay = memo(({ isDark, isProcessing, summary, detailed, bullets,
 
   if (isProcessing) {
     return (
-      <div className="glass-panel" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '32px', padding: '60px 40px', flex: 1 }}>
-        <div className="ai-orb">✨</div>
+      <div className="glass-panel" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '32px', padding: '60px 40px', flex: 1, background: isDark ? 'rgba(13, 15, 20, 0.4)' : 'rgba(255, 255, 255, 0.6)' }}>
+        <div className="ai-orb" style={{ background: 'var(--accent-gradient)', boxShadow: isDark ? '0 0 50px rgba(139, 92, 246, 0.3)' : '0 10px 30px rgba(139, 92, 246, 0.2)' }}>✨</div>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <span style={{ color: 'var(--accent-secondary)', fontWeight: 700, fontSize: '1.2rem', letterSpacing: '0.02em' }}>ANALYZING TRANSCRIPT</span>
             <div style={{ display: 'flex', gap: '6px' }}>
-              <div className="thinking-dot" />
-              <div className="thinking-dot" />
-              <div className="thinking-dot" />
+              <div className="thinking-dot" style={{ background: 'var(--accent-secondary)' }} />
+              <div className="thinking-dot" style={{ background: 'var(--accent-secondary)' }} />
+              <div className="thinking-dot" style={{ background: 'var(--accent-secondary)' }} />
             </div>
           </div>
           <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', textAlign: 'center', maxWidth: '350px', lineHeight: 1.6 }}>
@@ -163,10 +163,10 @@ const ResultsDisplay = memo(({ isDark, isProcessing, summary, detailed, bullets,
           </p>
         </div>
         <div style={{ width: '100%', maxWidth: '400px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <div className="skeleton-line" style={{ width: '100%' }} />
-          <div className="skeleton-line" style={{ width: '85%' }} />
-          <div className="skeleton-line" style={{ width: '92%' }} />
-          <div className="skeleton-line" style={{ width: '70%' }} />
+          <div className="skeleton-line" style={{ width: '100%', background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }} />
+          <div className="skeleton-line" style={{ width: '85%', background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }} />
+          <div className="skeleton-line" style={{ width: '92%', background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }} />
+          <div className="skeleton-line" style={{ width: '70%', background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }} />
         </div>
       </div>
     );
@@ -213,15 +213,15 @@ const ResultsDisplay = memo(({ isDark, isProcessing, summary, detailed, bullets,
             </button>
           </div>
         </div>
-        <div className="scroll-roll" style={{ maxHeight: isDetailed ? '400px' : 'none', overflowY: isDetailed ? 'auto' : 'visible' }}>
+        <div className="scroll-roll">
           {isDetailed ? formatText(detailed || "No detailed analysis available for this transcript.", true) : formatText(summary)}
         </div>
       </section>
 
-      <div className="glass-panel" style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: '500px', overflow: 'hidden' }}>
+      <div className="glass-panel" style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: '500px', overflow: 'hidden', background: isDark ? 'var(--surface-color)' : 'rgba(255, 255, 255, 0.7)' }}>
         <div style={{
-          display: 'flex', borderBottom: '1px solid var(--surface-border)', padding: '12px', gap: '8px',
-          background: 'rgba(0,0,0,0.2)'
+          display: 'flex', borderBottom: `1px solid ${isDark ? 'var(--surface-border)' : 'rgba(0,0,0,0.05)'}`, padding: '12px', gap: '8px',
+          background: isDark ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.4)'
         }}>
           {tabs.map(tab => (
             <button
@@ -249,8 +249,8 @@ const ResultsDisplay = memo(({ isDark, isProcessing, summary, detailed, bullets,
             {activeTab === 'bullets' && (
               <div className="result-reveal" style={{ display: 'flex', flexDirection: 'column', gap: '12px', contentVisibility: 'auto' }}>
                 {bullets?.map((b, i) => (
-                  <div key={i} className="collapsible-item stagger-item hover-lift" style={{ animationDelay: `${i * 0.1}s` }}>
-                    <div className="collapsible-header" onClick={() => toggleBullet(i)} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px', borderRadius: '12px', background: 'rgba(255,255,255,0.03)' }}>
+                  <div key={i} className="collapsible-item stagger-item hover-lift" style={{ animationDelay: `${i * 0.1}s`, background: isDark ? 'rgba(255,255,255,0.03)' : 'rgba(255,255,255,0.8)', border: `1px solid ${isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'}` }}>
+                    <div className="collapsible-header" onClick={() => toggleBullet(i)} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px', borderRadius: '12px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontWeight: 600 }}>
                         <CheckCircle2 size={18} color="var(--accent-secondary)" />
                         {renderFormattedContent(typeof b === 'object' ? b.title : b)}
@@ -258,9 +258,9 @@ const ResultsDisplay = memo(({ isDark, isProcessing, summary, detailed, bullets,
                       {expandedBullets.has(i) ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
                     </div>
                     {expandedBullets.has(i) && typeof b === 'object' && b.details && (
-                      <div className="collapsible-content" style={{ padding: '16px', background: 'rgba(0,0,0,0.1)', marginTop: '4px', borderRadius: '0 0 12px 12px' }}>
+                      <div className="collapsible-content" style={{ padding: '16px', background: isDark ? 'rgba(0,0,0,0.1)' : 'rgba(0,0,0,0.02)', marginTop: '4px', borderRadius: '0 0 12px 12px' }}>
                         {b.details.map((detail, di) => (
-                          <div key={di} className="collapsible-detail" style={{ padding: '4px 0', color: 'rgba(255,255,255,0.7)', fontSize: '0.9rem' }}>• {renderFormattedContent(detail)}</div>
+                          <div key={di} className="collapsible-detail" style={{ padding: '4px 0', color: isDark ? 'rgba(255,255,255,0.7)' : '#475569', fontSize: '0.9rem' }}>• {renderFormattedContent(detail)}</div>
                         ))}
                       </div>
                     )}
@@ -272,7 +272,7 @@ const ResultsDisplay = memo(({ isDark, isProcessing, summary, detailed, bullets,
             {activeTab === 'questions' && (
               <div className="flashcard-container result-reveal" style={{ display: 'flex', flexDirection: 'column', gap: '16px', contentVisibility: 'auto' }}>
                 {questions?.map((q, i) => (
-                  <div key={i} className="flashcard stagger-item hover-lift" onClick={() => toggleAnswer(i)} style={{ animationDelay: `${i * 0.1}s`, cursor: 'pointer', padding: '20px', borderRadius: '20px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)' }}>
+                  <div key={i} className="flashcard stagger-item hover-lift" onClick={() => toggleAnswer(i)} style={{ animationDelay: `${i * 0.1}s`, cursor: 'pointer', padding: '20px', borderRadius: '20px', background: isDark ? 'rgba(255,255,255,0.03)' : 'rgba(255,255,255,0.8)', border: `1px solid ${isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'}` }}>
                     <div className="flashcard-question" style={{ display: 'flex', gap: '12px', fontSize: '1rem', fontWeight: 600 }}>
                       <Lightbulb size={20} color="var(--accent-color)" style={{ flexShrink: 0 }} />
                       {renderFormattedContent(typeof q === 'object' ? q.question : q)}
@@ -283,7 +283,7 @@ const ResultsDisplay = memo(({ isDark, isProcessing, summary, detailed, bullets,
                       </div>
                     )}
                     {revealedAnswers.has(i) && (
-                      <div className="flashcard-answer" style={{ marginTop: '16px', padding: '16px', background: 'rgba(139, 92, 246, 0.1)', borderRadius: '12px', color: 'rgba(255,255,255,0.8)', fontSize: '0.95rem', borderLeft: '4px solid var(--accent-color)' }}>
+                      <div className="flashcard-answer" style={{ marginTop: '16px', padding: '16px', background: isDark ? 'rgba(139, 92, 246, 0.1)' : 'rgba(139, 92, 246, 0.05)', borderRadius: '12px', color: isDark ? 'rgba(255,255,255,0.8)' : '#334155', fontSize: '0.95rem', borderLeft: '4px solid var(--accent-color)' }}>
                         {renderFormattedContent(typeof q === 'object' ? q.answer : "No answer provided.")}
                       </div>
                     )}

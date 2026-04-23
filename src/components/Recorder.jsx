@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, memo } from 'react';
 import { Mic, Square } from 'lucide-react';
 
-const Recorder = memo(({ isRecording, isProcessing, onStart, onStop, transcript, style = {} }) => {
+const Recorder = memo(({ isRecording, isProcessing, onStart, onStop, transcript, style = {}, isDark = true }) => {
   const [volume, setVolume] = useState(0);
   const audioContextRef = useRef(null);
   const analyzerRef = useRef(null);
@@ -41,8 +41,14 @@ const Recorder = memo(({ isRecording, isProcessing, onStart, onStop, transcript,
   };
 
   const stopVisualization = () => {
-    if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
-    if (audioContextRef.current) audioContextRef.current.close();
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
+      animationFrameRef.current = null;
+    }
+    if (audioContextRef.current && audioContextRef.current.state !== 'closed') {
+      audioContextRef.current.close();
+      audioContextRef.current = null;
+    }
   };
 
   return (
@@ -50,8 +56,9 @@ const Recorder = memo(({ isRecording, isProcessing, onStart, onStop, transcript,
       className="glass-panel"
       style={{
         display: 'flex', flexDirection: 'column', padding: '24px',
-        position: 'relative', border: isRecording ? '1px solid var(--accent-color)' : undefined,
+        position: 'relative', border: isRecording ? '1px solid var(--accent-color)' : (isDark ? undefined : '1px solid rgba(0,0,0,0.05)'),
         height: '100%',
+        background: isDark ? 'var(--surface-color)' : 'rgba(255,255,255,0.8)',
         ...style
       }}
     >
@@ -59,7 +66,7 @@ const Recorder = memo(({ isRecording, isProcessing, onStart, onStop, transcript,
         <h3 style={{ fontSize: '0.7rem', fontWeight: 800, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
           {isRecording ? 'Capturing Speech' : 'Voice Interaction'}
         </h3>
-        {isRecording && <div className="status-pill status-live">Live</div>}
+        {isRecording && <div className="status-pill status-live" style={{ background: isDark ? 'rgba(239, 68, 68, 0.1)' : 'rgba(239, 68, 68, 0.05)' }}>Live</div>}
       </div>
 
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
@@ -68,17 +75,28 @@ const Recorder = memo(({ isRecording, isProcessing, onStart, onStop, transcript,
           style={{
             cursor: 'pointer',
             transform: `scale(${1 + (volume / 400)})`,
-            transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
+            transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+            filter: isDark ? 'url("#gooey-effect")' : 'url("#gooey-effect") brightness(1.1)',
+            boxShadow: isDark ? '0 0 100px rgba(139, 92, 246, 0.2)' : '0 20px 60px rgba(139, 92, 246, 0.1)'
           }}
           onClick={isRecording ? onStop : onStart}
         >
           {/* Multi-blob Liquid System */}
-          <div className="organic-orb-blob blob-1" style={{ transform: `scale(${1 + (volume / 100)}) rotate(${volume * 2}deg)` }} />
-          <div className="organic-orb-blob blob-2" style={{ transform: `scale(${1 + (volume / 150)}) rotate(${-volume * 1.5}deg)` }} />
-          <div className="organic-orb-blob blob-3" style={{ transform: `scale(${1 + (volume / 120)}) rotate(${volume}deg)` }} />
+          <div className="organic-orb-blob blob-1" style={{ 
+            transform: `scale(${1 + (volume / 100)}) rotate(${volume * 2}deg)`,
+            opacity: isDark ? 0.98 : 0.8
+          }} />
+          <div className="organic-orb-blob blob-2" style={{ 
+            transform: `scale(${1 + (volume / 150)}) rotate(${-volume * 1.5}deg)`,
+            opacity: isDark ? 0.98 : 0.8
+          }} />
+          <div className="organic-orb-blob blob-3" style={{ 
+            transform: `scale(${1 + (volume / 120)}) rotate(${volume}deg)`,
+            opacity: isDark ? 0.98 : 0.7
+          }} />
 
-          <div className="organic-orb-glint" />
-          <div className="organic-orb-core" style={{ transform: `scale(${0.8 + (volume / 100)})` }} />
+          <div className="organic-orb-glint" style={{ opacity: isDark ? 0.5 : 0.8 }} />
+          <div className="organic-orb-core" style={{ transform: `scale(${0.8 + (volume / 100)})`, opacity: isDark ? 0.7 : 0.9 }} />
 
           {isRecording ? (
             <Square size={32} color="white" style={{ position: 'relative', zIndex: 10, filter: 'drop-shadow(0 0 10px rgba(0,0,0,0.5))' }} />
@@ -91,8 +109,8 @@ const Recorder = memo(({ isRecording, isProcessing, onStart, onStop, transcript,
       <svg style={{ position: 'absolute', width: 0, height: 0 }}>
         <defs>
           <filter id="gooey-effect">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
-            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -10" result="goo" />
+            <feGaussianBlur in="SourceGraphic" stdDeviation="15" result="blur" />
+            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 30 -15" result="goo" />
             <feComposite in="SourceGraphic" in2="goo" operator="atop" />
           </filter>
         </defs>

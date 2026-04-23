@@ -73,8 +73,8 @@ const TimelineItem = ({ event, index, isLast, layout, isActive, onToggleExpand, 
         <div
           onClick={toggle}
           className={`timeline-card ${isExpanded ? 'expanded' : ''} ${isDark ? '' : 'light'}`}
-          style={{ 
-            width: '100%', 
+          style={{
+            width: '100%',
             ...activeStyles,
             background: isActive ? (isDark ? 'rgba(255,255,255,0.08)' : '#ffffff') : (isDark ? 'rgba(255,255,255,0.03)' : '#f8fafc'),
             border: `1px solid ${isActive ? (isDark ? 'white' : color) : (isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)')}`
@@ -107,8 +107,19 @@ const TimelineItem = ({ event, index, isLast, layout, isActive, onToggleExpand, 
             <span style={{ fontSize: '0.6rem', fontWeight: 900, color: isActive ? (isDark ? 'white' : color) : (isDark ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.2)'), textTransform: 'uppercase', letterSpacing: '0.1em' }}>
               {event.category || 'POINT'}
             </span>
-            <div style={{ transform: isExpanded ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 0.4s ease', color: isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)' }}>
-              <ChevronDown size={14} />
+            <div style={{ 
+              transform: isExpanded ? 'rotate(180deg)' : 'rotate(0)', 
+              transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)', 
+              color: isDark ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.4)',
+              background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+              borderRadius: '50%',
+              width: '28px',
+              height: '28px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}>
+              <ChevronDown size={16} />
             </div>
           </div>
         </div>
@@ -161,10 +172,14 @@ const TimelineItem = ({ event, index, isLast, layout, isActive, onToggleExpand, 
             <div style={{
               transform: isExpanded ? 'rotate(180deg)' : 'rotate(0)',
               transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-              padding: '10px',
-              background: isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.03)',
+              background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
               borderRadius: '50%',
-              color: isDark ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.3)'
+              width: '36px',
+              height: '36px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: isDark ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.4)'
             }}>
               <ChevronDown size={20} />
             </div>
@@ -226,10 +241,10 @@ const TimelineRenderer = ({ events, isDark = true }) => {
 
   if (!events || events.length === 0) {
     return (
-      <div style={{ 
-        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', 
-        padding: '100px 40px', background: isDark ? 'rgba(13, 15, 20, 0.4)' : 'rgba(248, 250, 252, 0.8)', 
-        borderRadius: '40px', border: `1px dashed ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}` 
+      <div style={{
+        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+        padding: '100px 40px', background: isDark ? 'rgba(13, 15, 20, 0.4)' : 'rgba(248, 250, 252, 0.8)',
+        borderRadius: '40px', border: `1px dashed ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}`
       }}>
         <div style={{ padding: '20px', borderRadius: '50%', background: isDark ? 'rgba(255,255,255,0.02)' : 'rgba(0,0,0,0.02)', marginBottom: '20px' }}>
           <Activity size={40} color={isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)"} />
@@ -259,13 +274,13 @@ const TimelineRenderer = ({ events, isDark = true }) => {
 
           <div style={{ display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'flex-end', zIndex: 40 }}>
             {/* Playback Controls */}
-            <div style={{ 
-              display: 'flex', 
-              background: isDark ? 'rgba(0,0,0,0.4)' : '#ffffff', 
-              padding: '6px', 
-              borderRadius: '20px', 
-              border: `1px solid ${isDark ? 'var(--surface-border)' : 'rgba(0,0,0,0.1)'}`, 
-              gap: '4px', 
+            <div style={{
+              display: 'flex',
+              background: isDark ? 'rgba(0,0,0,0.4)' : '#ffffff',
+              padding: '6px',
+              borderRadius: '20px',
+              border: `1px solid ${isDark ? 'var(--surface-border)' : 'rgba(0,0,0,0.1)'}`,
+              gap: '4px',
               backdropFilter: 'blur(10px)',
               boxShadow: isDark ? 'none' : '0 4px 12px rgba(0,0,0,0.05)'
             }}>
@@ -339,11 +354,11 @@ const TimelineRenderer = ({ events, isDark = true }) => {
         </header>
 
         {isPlaying && (
-          <div className="animate-slide-up" style={{ 
-            marginBottom: '40px', 
-            background: isDark ? 'rgba(139, 92, 246, 0.05)' : 'rgba(139, 92, 246, 0.03)', 
-            border: `1px solid ${isDark ? 'rgba(139, 92, 246, 0.2)' : 'rgba(139, 92, 246, 0.1)'}`, 
-            borderRadius: '20px', padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' 
+          <div className="animate-slide-up" style={{
+            marginBottom: '40px',
+            background: isDark ? 'rgba(139, 92, 246, 0.05)' : 'rgba(139, 92, 246, 0.03)',
+            border: `1px solid ${isDark ? 'rgba(139, 92, 246, 0.2)' : 'rgba(139, 92, 246, 0.1)'}`,
+            borderRadius: '20px', padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between'
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
               <div style={{ position: 'relative', width: '200px', height: '6px', background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)', borderRadius: '3px', overflow: 'hidden' }}>
@@ -365,7 +380,7 @@ const TimelineRenderer = ({ events, isDark = true }) => {
                   style={{
                     padding: '4px 10px', fontSize: '0.65rem', fontWeight: 900, borderRadius: '6px',
                     background: playbackSpeed === speed ? 'var(--accent-color)' : (isDark ? 'rgba(255,255,255,0.05)' : '#ffffff'),
-                    color: playbackSpeed === speed ? 'white' : (isDark ? 'white' : '#64748b'), 
+                    color: playbackSpeed === speed ? 'white' : (isDark ? 'white' : '#64748b'),
                     border: isDark ? 'none' : '1px solid rgba(0,0,0,0.1)'
                   }}
                 >

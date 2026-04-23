@@ -146,7 +146,7 @@ export default function Home() {
               style={{
                 position: 'relative', background: 'none', border: 'none', cursor: 'pointer',
                 display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 16px',
-                color: processingMode === m.id ? 'white' : 'rgba(255,255,255,0.4)',
+                color: processingMode === m.id ? (isDark ? 'white' : 'var(--text-primary)') : (isDark ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.4)'),
                 transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
                 fontWeight: 600, fontSize: '0.85rem'
               }}
@@ -163,7 +163,7 @@ export default function Home() {
         </nav>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexShrink: 0 }}>
-          <button onClick={toggleTheme} style={{ color: 'rgba(255,255,255,0.6)', background: 'rgba(255,255,255,0.03)', width: '42px', height: '42px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.08)', transition: 'all 0.2s ease' }}>
+          <button onClick={toggleTheme} style={{ color: isDark ? 'rgba(255,255,255,0.6)' : 'rgba(0,0,0,0.6)', background: isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.03)', width: '42px', height: '42px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', border: `1px solid ${isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)'}`, transition: 'all 0.2s ease' }}>
             {isDark ? <Sun size={20} /> : <Moon size={20} />}
           </button>
           {session ? (
@@ -209,9 +209,9 @@ export default function Home() {
       )}
 
       {errorMsg && (
-        <div className="glass-panel animate-slide-up" style={{ position: 'fixed', top: '100px', right: '40px', zIndex: 1000, background: 'rgba(13, 15, 20, 0.8)', padding: '20px', borderRadius: '20px', display: 'flex', alignItems: 'center', gap: '16px' }}>
+        <div className="glass-panel animate-slide-up" style={{ position: 'fixed', top: '100px', right: '40px', zIndex: 1000, background: isDark ? 'rgba(13, 15, 20, 0.8)' : 'rgba(255, 255, 255, 0.9)', padding: '20px', borderRadius: '20px', display: 'flex', alignItems: 'center', gap: '16px', border: `1px solid ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)'}` }}>
           <span style={{ fontWeight: 600, fontSize: '0.9rem' }}>{errorMsg}</span>
-          <button onClick={() => setErrorMsg('')} style={{ opacity: 0.5 }}>✕</button>
+          <button onClick={() => setErrorMsg('')} style={{ opacity: 0.5, color: 'inherit' }}>✕</button>
         </div>
       )}
 
@@ -220,6 +220,7 @@ export default function Home() {
           {/* Top Panel: Voice Card */}
           <div style={{ flex: 1, minHeight: '300px' }}>
             <Recorder
+              isDark={isDark}
               isRecording={isRecording}
               isProcessing={isProcessing}
               onStart={handleStartRecording}
@@ -258,7 +259,7 @@ export default function Home() {
                   width: '100%', flex: 1,
                   borderRadius: '16px', padding: '16px', color: 'var(--text-primary)',
                   fontSize: '1rem', resize: 'none', border: '1px solid var(--surface-border)',
-                  background: 'rgba(0,0,0,0.1)'
+                  background: isDark ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.5)'
                 }}
               />
             </div>
@@ -297,6 +298,7 @@ export default function Home() {
 
             {formattedData && !isProcessing && (
               <ExportBar
+                isDark={isDark}
                 summary={formattedData.summary}
                 bullets={formattedData.bullets}
                 questions={formattedData.questions}
